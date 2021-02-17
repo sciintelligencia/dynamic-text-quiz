@@ -68,11 +68,11 @@ if( !class_exists('DTQPlugin') ) {
          */
         public function constants()
         {
-            $this->define('VERSION', '1.0');
-            $this->define('PREFIX', 'dtq_');
-            $this->define('TEXT_DOMAIN', 'dynamic-text-quiz');
-            $this->define('PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
-            $this->define('PLUGIN_DIR_URL', plugin_dir_url(__FILE__));
+            $this->define('DTQ_VERSION', '1.0');
+            $this->define('DTQ_PREFIX', 'dtq_');
+            $this->define('DTQ_TEXT_DOMAIN', 'dynamic-text-quiz');
+            $this->define('DTQ_PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
+            $this->define('DTQ_PLUGIN_DIR_URL', plugin_dir_url(__FILE__));
         }
 
         /**
@@ -94,7 +94,7 @@ if( !class_exists('DTQPlugin') ) {
          */
         public function includes()
         {
-            $this->file(PLUGIN_DIR_PATH. 'includes/dynamic-text-quiz-functions.php');
+            $this->file(DTQ_PLUGIN_DIR_PATH. 'includes/dynamic-text-quiz-functions.php');
         }
 
         /**
@@ -104,8 +104,8 @@ if( !class_exists('DTQPlugin') ) {
          */
         public function enqueue_scripts()
         {
-            wp_enqueue_style(TEXT_DOMAIN . '-css', PLUGIN_DIR_URL . 'assets/css/style.css', [], VERSION, 'all');
-            wp_enqueue_script(TEXT_DOMAIN . '-custom-js', PLUGIN_DIR_URL . 'assets/js/custom.js', ['jquery'], VERSION, true);
+            wp_enqueue_style(DTQ_TEXT_DOMAIN . '-css', DTQ_PLUGIN_DIR_URL . 'assets/css/style.css', [], DTQ_VERSION, 'all');
+            wp_enqueue_script(DTQ_TEXT_DOMAIN . '-custom-js', DTQ_PLUGIN_DIR_URL . 'assets/js/custom.js', ['jquery'], DTQ_VERSION, true);
         }
 
         /**
@@ -116,13 +116,36 @@ if( !class_exists('DTQPlugin') ) {
         public function add_menu()
         {
             add_menu_page(
-                __( 'Starter Plugin', TEXT_DOMAIN ),
-                'Starter Plugin',
+                __( 'Dynamic Text Quiz', DTQ_TEXT_DOMAIN ),
+                'Dynamic Text Quiz',
                 'manage_options',
-                TEXT_DOMAIN . '-home',
+                DTQ_TEXT_DOMAIN . '-home',
                 [$this, 'home'],
                 'dashicons-admin-site-alt2'
             );
+
+            add_submenu_page(
+	            DTQ_TEXT_DOMAIN. "-home",
+	            __( 'Dynamic Text Quiz', DTQ_TEXT_DOMAIN ),
+	            'Dynamic Text Quiz',
+	            'manage_options',
+	            DTQ_TEXT_DOMAIN . '-home',
+	            [$this, 'home']
+            );
+
+            add_submenu_page(
+	            DTQ_TEXT_DOMAIN. "-home",
+	            __("Display All Text", DTQ_TEXT_DOMAIN),
+	            "Display All Text",
+	            "manage_options",
+	            DTQ_TEXT_DOMAIN. "-all-text",
+	            [$this, "display_text"]
+            );
+        }
+
+        public function display_text()
+        {
+        	require_once DTQ_PLUGIN_DIR_PATH . "templates/display-all-text.php";
         }
 
         /**
@@ -132,7 +155,7 @@ if( !class_exists('DTQPlugin') ) {
          */
         public function home()
         {
-
+			return require_once DTQ_PLUGIN_DIR_PATH . "templates/home.php";
         }
 
         /**
@@ -143,7 +166,19 @@ if( !class_exists('DTQPlugin') ) {
         public function add_actions()
         {
             add_action('init', [$this, 'enqueue_scripts']);
-            add_action('admin_menu', [$this, 'add_menu']);
+	        add_action('init', [$this, 'add_shortcodes']);
+	        add_action('admin_menu', [$this, 'add_menu']);
+        }
+
+        public function add_shortcodes()
+        {
+        	add_shortcode( "dynamic_text", [ $this, "dynamic_text" ] );
+        }
+
+        public function dynamic_text()
+        {
+
+        	require_once DTQ_PLUGIN_DIR_PATH . "templates/dynamic-text.php";
         }
 
         /**

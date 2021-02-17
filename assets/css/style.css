@@ -1,0 +1,50 @@
+.dynamic-main {
+    padding: 1px;
+    background: #fff;
+}
+.dynamic-image {
+    padding: 1px;
+    background: #fff;
+}
+.dynamic-input form {
+    width: 100%;
+    padding: 1px;
+    display: grid;
+}
+
+.dynamic-input form label {
+    width: 100%;
+    padding: 25px;
+    color: #000;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.dynamic-input-name,
+.dynamic-button {
+    outline: none;
+    border: 2px solid #3666e9 !important;
+    border-radius: 50px !important;
+    margin-bottom: 10px;
+    height: 70px !important;
+}
+
+.dynamic-button:hover {
+    border: 2px solid #3666e9 !important;
+    border-radius: 50px !important;
+    background: #0274be;
+}
+
+.dynamic-result {
+    text-align: center;
+    width: 100%;
+    min-height: 20px;
+    background: #fff;
+    font-size: 40px;
+}
+
+.dynamic-question {
+    color: #000;
+    font-weight: bold;
+    font-size: 30px;
+}
